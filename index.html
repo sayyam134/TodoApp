@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo APP</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <nav class="bg-gray-800 justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div>
+                    <span class="ml-10 text-3xl font-semibold text-white cursor-pointer">
+                        <a href="/">ToDo App</a>
+                    </span>
+                </div>
+                <div class="flex items-center">
+                    <a href="/" class="flex-shrink-0 text-gray-300 hover:text-white">
+                        <!-- Home link -->
+                        <span class="text-xl font-semibold">Home</span>
+                    </a>
+                    <div class="hidden md:block">
+                        <a href="/about.html" class="ml-10 text-xl font-semibold text-gray-300 hover:text-white">
+                            <!-- About link -->
+                            <span class="text-md">About</span>
+                        </a>
+                        <a href="/contact.html" class="ml-10 text-xl font-semibold text-gray-300 hover:text-white">
+                            <!-- Contact link -->
+                            <span class="text-md">Contact</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <!-- HTML code for the centered todo form -->
+        <div class="flex items-start justify-around py-20 px-10 min-h-[88vh] min-w-full bg-gray-100">
+            <div class="w-full max-w-md bg-white p-8 rounded-md shadow-md">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+                    Add Todo
+                </h2>
+                <div class="mb-4">
+                    <label for="title" class="block text-gray-700 text-sm font-semibold mb-1">
+                        Title
+                    </label>
+                    <input type="text" id="title" name="title"
+                        class="w-full px-4 py-2 border border-gray-300 focus:border-blue-500 rounded-md focus:outline-none"
+                        placeholder="Enter title">
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-gray-700 text-sm font-semibold mb-1">
+                        Description
+                    </label>
+                    <textarea id="description" name="description"
+                        class="w-full px-4 py-2 border border-gray-300 focus:border-blue-500 rounded-md focus:outline-none h-32 resize-none"
+                        placeholder="Enter description"></textarea>
+                </div>
+                <button onclick="update()" type="submit"
+                    class="w-full bg-gray-900 text-white font-semibold py-2 rounded-md hover:bg-gray-800 focus:outline-none">
+                    Add Todo
+                </button>
+            </div>
+
+            <!-- table -->
+            <!-- HTML code for the todo table -->
+            <div class="bg-gray-800 p-8 rounded-md shadow-md">
+                <table id="todoTable" class="w-full">
+                    <thead>
+                        <tr class="bg-gray-900">
+                            <th class="px-4 py-2 font-semibold text-white">Sno</th>
+                            <th class="px-4 py-2 font-semibold text-white">Title</th>
+                            <th class="px-4 py-2 font-semibold text-white">Description</th>
+                            <th class="px-4 py-2 font-semibold text-white">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody" class="text-justify">
+                        <tr>
+                            <td class="px-4 py-2 text-white">1</td>
+                            <td class="px-4 py-2 text-white">Example</td>
+                            <td class="px-4 py-2 text-white">This is a sample Task</td>
+                            <td class="px-4 py-2">
+                                <button onclick="del()"
+                                    class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-md focus:outline-none">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="bg-gray-800 p-4 min-h-full">
+            <p class="text-white text-center">This is a ToDo App Ceated by Sayyam Sancheti
+            </p>
+        </div>
+        </div>
+    </footer>
+    <script>
+        function update() {
+            const tit = document.getElementById("title").value;
+            const desc = document.getElementById("description").value;
+
+            const todos = JSON.parse(localStorage.getItem('todos')) || [];
+
+            todos.push([tit, desc]);
+            localStorage.setItem('todos', JSON.stringify(todos));
+
+            renderTodos();
+
+            document.getElementById("title").value = "";
+            document.getElementById("description").value = "";
+        }
+
+        function del() {
+            const todos = JSON.parse(localStorage.getItem('todos')) || [];
+            todos.forEach((todo, index) => {
+                todos.splice(index, 1);
+                localStorage.setItem('todos', JSON.stringify(todos));
+            })
+
+            renderTodos();
+        }
+        function renderTodos() {
+            const todos = JSON.parse(localStorage.getItem('todos')) || [];
+            const tbody = document.getElementById('tbody');
+
+            tbody.innerHTML = '';
+            let str = ""
+            todos.forEach((todo, index) => {
+                str += `
+        <tr>
+            <td class="px-4 py-2 text-white">${index + 1}</td>
+            <td class="px-4 py-2 text-white">${todo[0]}</td>
+            <td class="px-4 py-2 text-white">${todo[1]}</td>
+            <td class="px-4 py-2">
+            <button onclick="del()"
+                class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-md focus:outline-none">
+                    Delete
+            </button>
+            </td>
+            </tr>
+        `
+                tbody.innerHTML = str;
+            });
+        }
+
+
+    </script>
+</body>
+
+</html>
